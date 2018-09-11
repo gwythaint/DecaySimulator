@@ -26,7 +26,11 @@ public class ControlPanel extends JPanel {
 		this.add(reset);
 		this.add(start);
 		
-		this.setBackground(Color.blue);
+		
+	}
+	
+	public void labelUpdate(String label){
+		start.setText(label);
 	}
 
 }

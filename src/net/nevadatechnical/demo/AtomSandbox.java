@@ -9,17 +9,18 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class AtomSandbox extends JPanel {
+	private static final int GRIDSIZE = 50;
 	private Atom atomTable[][];
 	public int nAtoms, nRow, nCol;
 
 	public AtomSandbox () {
 		int i,j;
-		this.atomTable = new Atom[50][50];
 		this.nAtoms = 2500;
+		this.atomTable = new Atom[GRIDSIZE][GRIDSIZE];
 
 		/* generate a 2D array of atoms */
-		for (i = 0; i < 50; i++) {
-			for ( j = 0; j < 50; j++) {
+		for (i = 0; i <GRIDSIZE; i++) {
+			for ( j = 0; j < GRIDSIZE; j++) {
 				this.atomTable[i][j] = new Atom(Color.blue, i, j);
 			}
 		}
@@ -47,9 +48,7 @@ public class AtomSandbox extends JPanel {
 	public void paintComponent(Graphics g){
 		int i,j;
 		
-		this.setBorder(BorderFactory.createLineBorder(Color.black));
 
-		this.setBackground(Color.red);
 		for (i = 0; i < nRow; i++) {
 			for ( j = 0; j < nCol; j++) {
 				atomTable[i][j].draw(g);
