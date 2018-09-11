@@ -21,16 +21,18 @@ public class DecayDemo implements ActionListener {
 	private ControlPanel control;
 	private JSplitPane split;
 	private JPanel topPanel, left, right;
+	private int nAtoms;
 
-	public DecayDemo() {
+	public DecayDemo(int nAtoms) {
 		super();
+		this.nAtoms = nAtoms;
 		timer = new Timer(10, this);
 		timer.setActionCommand("tick");
 		
 		
 		control = new ControlPanel(this);
-		sandbox = new AtomSandbox(100);
-		chart = new DecayChart(500, 300, 100);
+		sandbox = new AtomSandbox(nAtoms);
+		chart = new DecayChart(500, 300, nAtoms);
 		
 
 		left = new JPanel();
@@ -54,7 +56,7 @@ public class DecayDemo implements ActionListener {
 
 	public static void main(String[] args){
 		JFrame frame = new JFrame("Radioactive Decay Simulation");	
-		DecayDemo demo = new DecayDemo();
+		DecayDemo demo = new DecayDemo(2500);
 
 		frame.getContentPane().add(demo.topPanel);
 
@@ -81,24 +83,26 @@ public class DecayDemo implements ActionListener {
 		if (e.getActionCommand().equals("tick")) {
 			sandbox.tick(e);
 			chart.tick(e);
-			chart.update(this.sandbox.nAtoms);
+			chart.update(sandbox.nAtoms);
 		}
 		
 		/* reset atoms */
 		if (e.getActionCommand().equals("reset")) {
 			timer.stop();
+			sandbox.reset();
 			chart.reset();
-			sandbox = new AtomSandbox(2500);
+			chart.update(sandbox.nAtoms);
+			control.labelUpdate("Start");
 		}
 
 		/* start simulator */
 		if (e.getActionCommand().equals("start")) {
 			if(timer.isRunning()) {
 				timer.stop();
-				this.control.labelUpdate("Start");
+				control.labelUpdate("Start");
 			} else {
 			timer.start();
-			this.control.labelUpdate("Pause");
+				control.labelUpdate("Pause");
 			}
 		}
 			

@@ -28,11 +28,12 @@ public class DecayChart extends JPanel {
 		this.yscale = yscale;
 		this.numerator = nAtoms;
 		this.denominator = nAtoms;
-		this.setPreferredSize(new Dimension(xscale + 20, yscale + 20));
+		this.setPreferredSize(new Dimension(xscale + xoffset, yscale + yoffset));
 		
 	    setBorder(new TitledBorder(new LineBorder(Color.black, 1),
 	        "Exponential Decay Curve"));
-	    setBackground(Color.green);
+	    setBackground(Color.gray);
+	    reset();
 
 	}
 	public void renderOffScreen(final Graphics g) {
@@ -44,7 +45,7 @@ public class DecayChart extends JPanel {
 		super.paintComponent(g);
 
 		if (offScreenImage == null) {
-			offScreenImage = this.createImage(xscale, yscale); 
+			offScreenImage = createImage(xscale + xoffset, yscale + yoffset); 
 		}
 		osg = offScreenImage.getGraphics();
 
@@ -56,19 +57,27 @@ public class DecayChart extends JPanel {
 	}
 	
 	public void tick(ActionEvent e) {
-		xpos++;
-		repaint();
-		System.out.println("x: " + xpos + " y: " + ypos);
+		if (xpos < xscale) {
+			repaint();
+			xpos++;
+			System.out.println("tick x: " + xpos + " y: " + ypos);
+		}
 	}
 
 	public void update(int nAtoms) {
 		numerator = nAtoms;
-		ypos = yscale - (int) (((double)numerator / (double)denominator) * yscale);
+		double fraction = ((double)numerator / (double)denominator);
+
+		ypos = yscale - (int) (fraction * yscale);
+
 	}
 	
 	public void reset() {
-		// TODO Auto-generated method stub
 		xpos = 0;
 		ypos = 0;
+		offScreenImage = createImage(xscale + xoffset, yscale + yoffset);
+		ypos = yscale - (int) (((double)numerator / (double)denominator) * yscale);
+
+		repaint();
 	}
 }
