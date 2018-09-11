@@ -24,6 +24,12 @@ public class ControlPanel extends JPanel {
 		
 		this.add(reset);
 		this.add(start);
+		
+		
+	}
+	
+	public void labelUpdate(String label){
+		start.setText(label);
 	}
 
 }
