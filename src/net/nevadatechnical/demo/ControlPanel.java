@@ -1,5 +1,6 @@
 package net.nevadatechnical.demo;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -24,6 +25,8 @@ public class ControlPanel extends JPanel {
 		
 		this.add(reset);
 		this.add(start);
+		
+		this.setBackground(Color.blue);
 	}
 
 }

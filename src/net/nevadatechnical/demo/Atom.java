@@ -22,7 +22,7 @@ public class Atom {
 		this.setHeight(1);
 		this.setXpos(i);
 		this.setYpos(j);
-		this.setHalflife(100);
+		this.setHalflife(10);
 		
 		/* synchronize half life and decay constant */
 		this.lambda = 0.693 / this.getHalflife();

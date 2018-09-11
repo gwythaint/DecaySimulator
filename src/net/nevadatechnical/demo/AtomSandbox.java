@@ -1,17 +1,21 @@
 package net.nevadatechnical.demo;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class AtomSandbox extends JPanel {
 	private Atom atomTable[][];
+	public int nAtoms, nRow, nCol;
 
 	public AtomSandbox () {
 		int i,j;
 		this.atomTable = new Atom[50][50];
+		this.nAtoms = 2500;
 
 		/* generate a 2D array of atoms */
 		for (i = 0; i < 50; i++) {
@@ -19,28 +23,52 @@ public class AtomSandbox extends JPanel {
 				this.atomTable[i][j] = new Atom(Color.blue, i, j);
 			}
 		}
+		this.setPreferredSize(new Dimension(500,500));
+		this.repaint();
 	}
 
-	/* paint a 50x50 grid of atoms */
-	public void paint(Graphics g){
+	public AtomSandbox(int nAtoms) {
+		int i,j;
+		this.nAtoms = nAtoms;
+		nRow = (int) Math.sqrt(nAtoms);
+		nCol = nRow;
+		atomTable = new Atom[nCol][nRow];
+
+		/* generate a 2D array of atoms */
+		for (i = 0; i < nRow; i++) {
+			for ( j = 0; j < nCol; j++) {
+				atomTable[i][j] = new Atom(Color.blue, i, j);
+			}
+		}
+		setPreferredSize(new Dimension(500,500));
+		repaint();
+	}
+
+	public void paintComponent(Graphics g){
 		int i,j;
 		
-		for (i = 0; i < 50; i++) {
-			for ( j = 0; j < 50; j++) {
+		this.setBorder(BorderFactory.createLineBorder(Color.black));
+
+		this.setBackground(Color.red);
+		for (i = 0; i < nRow; i++) {
+			for ( j = 0; j < nCol; j++) {
 				atomTable[i][j].draw(g);
 			}
 		}
+		this.setBackground(Color.red);
 	}
 
 	public void tick(ActionEvent e) {
 		int i,j;
 		
-		for (i = 0; i < 50; i++) {
-			for ( j = 0; j < 50; j++) {
+		for (i = 0; i < nRow; i++) {
+			for ( j = 0; j < nCol; j++) {
 					Atom atom = this.atomTable[i][j];
 					if (!atom.decayed)
-						if(atom.decay())
+						if(atom.decay()) {
+							nAtoms--;
 							repaint();
+						}
 				}
 			}
 

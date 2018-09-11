@@ -1,9 +1,12 @@
 package net.nevadatechnical.demo;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -14,27 +17,39 @@ public class DecayDemo implements ActionListener {
 
 	public Timer timer;
 	private AtomSandbox sandbox;
+	private DecayChart chart;
 	private ControlPanel control;
 	private JSplitPane split;
-	private JPanel topPanel;
+	private JPanel topPanel, left, right;
 
 	public DecayDemo() {
 		super();
-		this.timer = new Timer(10, this);
-		this.timer.setActionCommand("tick");
+		timer = new Timer(10, this);
+		timer.setActionCommand("tick");
 		
 		
 		control = new ControlPanel(this);
-		sandbox = new AtomSandbox(); 	
+		sandbox = new AtomSandbox(100);
+		chart = new DecayChart(500, 300, 100);
 		
-		split = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
+
+		left = new JPanel();
+		right = new JPanel();
+
+		left.setLayout(new FlowLayout());
+
+		left.add(sandbox);
+		left.add(control);
+		right.add(chart);
+
+		split = new JSplitPane( JSplitPane.VERTICAL_SPLIT);
 		topPanel = new JPanel();
 		topPanel.setLayout( new BorderLayout() );
 		topPanel.add(split);
 		
-		topPanel.add(split, BorderLayout.CENTER);
-		split.setRightComponent(sandbox);
-		split.setLeftComponent(control);
+		split.setTopComponent(left);
+		split.setBottomComponent(right);
+		split.setDividerLocation(500);
 	}
 
 	public static void main(String[] args){
@@ -43,8 +58,10 @@ public class DecayDemo implements ActionListener {
 
 		frame.getContentPane().add(demo.topPanel);
 
-		frame.setSize(800, 800);
+		frame.setSize(850, 850);
 		frame.setVisible(true);
+
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		
@@ -60,15 +77,18 @@ public class DecayDemo implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		/* time interval happend */
-		if (e.getActionCommand().equals("tick"))
-			this.sandbox.tick(e);
+		/* time interval happened */
+		if (e.getActionCommand().equals("tick")) {
+			sandbox.tick(e);
+			chart.tick(e);
+			chart.update(this.sandbox.nAtoms);
+		}
 		
 		/* reset atoms */
 		if (e.getActionCommand().equals("reset")) {
 			timer.stop();
-			sandbox = new AtomSandbox();
-			split.setRightComponent(sandbox);
+			chart.reset();
+			sandbox = new AtomSandbox(2500);
 		}
 
 		/* start simulator */
