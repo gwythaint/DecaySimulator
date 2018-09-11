@@ -73,7 +73,13 @@ public class DecayDemo implements ActionListener {
 
 		/* start simulator */
 		if (e.getActionCommand().equals("start")) {
+			if(timer.isRunning()) {
+				timer.stop();
+				this.control.labelUpdate("Start");
+			} else {
 			timer.start();
+			this.control.labelUpdate("Pause");
+			}
 		}
 			
 	}
