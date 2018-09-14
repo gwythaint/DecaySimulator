@@ -2,9 +2,11 @@ package net.nevadatechnical.demo;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EventObject;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -13,7 +15,7 @@ import javax.swing.JSplitPane;
 import javax.swing.Timer;
 
 @SuppressWarnings("serial")
-public class DecayDemo implements ActionListener {
+public class DecayDemo implements ActionListener, SimulatorListener {
 
 	public Timer timer;
 	private AtomSandbox sandbox;
@@ -79,6 +81,7 @@ public class DecayDemo implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		/* time interval happened */
 		if (e.getActionCommand().equals("tick")) {
 			sandbox.tick(e);
@@ -94,6 +97,7 @@ public class DecayDemo implements ActionListener {
 			chart.update(sandbox.nAtoms);
 			control.labelUpdate("Start");
 		}
+		
 
 		/* start simulator */
 		if (e.getActionCommand().equals("start")) {
@@ -106,6 +110,16 @@ public class DecayDemo implements ActionListener {
 			}
 		}
 			
+	}
+
+	@Override
+	public void modelChange(ModelEvent event) {
+		timer.stop();
+		sandbox.nAtomsStart = event.value;
+		sandbox.reset();
+		chart.reset();
+		chart.update(sandbox.nAtoms);
+		control.labelUpdate("Start");
 	}
 }
 

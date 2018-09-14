@@ -12,7 +12,7 @@ public class AtomSandbox extends JPanel {
 	private static final int GRIDSIZE = 50;
 	private Atom atomTable[][];
 	public int nAtoms, nRow, nCol;
-	private int nAtomsStart;
+	public int nAtomsStart;
 
 	public AtomSandbox(int nAtoms) {
 		nAtomsStart = nAtoms;

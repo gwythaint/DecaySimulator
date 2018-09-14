@@ -22,7 +22,7 @@ public class Atom {
 		this.setHeight(1);
 		this.setXpos(i);
 		this.setYpos(j);
-		this.setHalflife(10);
+		this.setHalflife(100);
 		
 		/* synchronize half life and decay constant */
 		this.lambda = 0.693 / this.getHalflife();
@@ -89,6 +89,7 @@ public class Atom {
 		if (chance < this.lambda) {
 			this.decayed = true;
 			color = Color.white;
+			
 		} else {
 		}
 		return this.decayed;
