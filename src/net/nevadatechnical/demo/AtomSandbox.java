@@ -14,9 +14,9 @@ public class AtomSandbox extends JPanel {
 	public int nAtoms, nRow, nCol;
 	public int nAtomsStart;
 
-	public AtomSandbox(int nAtoms) {
+	public AtomSandbox(int nAtoms, Dimension dim) {
 		nAtomsStart = nAtoms;
-		setPreferredSize(new Dimension(500,500));
+		setPreferredSize(dim);
 		reset();
 	}
 

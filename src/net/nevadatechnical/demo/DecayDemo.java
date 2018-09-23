@@ -21,8 +21,8 @@ public class DecayDemo implements ActionListener, SimulatorListener {
 	private AtomSandbox sandbox;
 	private DecayChart chart;
 	private ControlPanel control;
-	private JSplitPane split;
-	private JPanel topPanel, left, right;
+//	private JSplitPane split;
+	private JPanel middle, left, right, topPanel;
 	private int nAtoms;
 
 	public DecayDemo(int nAtoms) {
@@ -32,42 +32,45 @@ public class DecayDemo implements ActionListener, SimulatorListener {
 		timer.setActionCommand("tick");
 		
 		
-		control = new ControlPanel(this);
-		sandbox = new AtomSandbox(nAtoms);
-		chart = new DecayChart(500, 300, nAtoms);
+		control = new ControlPanel(this, new Dimension(100, 500));
+		sandbox = new AtomSandbox(nAtoms, new Dimension(300, 500));
+		chart = new DecayChart(nAtoms, new Dimension(600, 500));
 		
 
+		topPanel = new JPanel();
 		left = new JPanel();
 		right = new JPanel();
-
-		left.setLayout(new FlowLayout());
+		middle = new JPanel();
+		
+		topPanel.add(left);
+		topPanel.add(middle);
+		topPanel.add(right);
 
 		left.add(sandbox);
-		left.add(control);
-		right.add(chart);
+		middle.add(chart);
+		right.add(control);
 
-		split = new JSplitPane( JSplitPane.VERTICAL_SPLIT);
-		topPanel = new JPanel();
-		topPanel.setLayout( new BorderLayout() );
-		topPanel.add(split);
+//		split = new JSplitPane( JSplitPane.VERTICAL_SPLIT);
+//		topPanel.setLayout( new BorderLayout() );
+//		topPanel.add(split);
 		
-		split.setTopComponent(left);
-		split.setBottomComponent(right);
-		split.setDividerLocation(500);
+//		split.setTopComponent(left);
+//		split.setBottomComponent(right);
+//		split.setDividerLocation(500);
 	}
 
 	public static void main(String[] args){
 		JFrame frame = new JFrame("Radioactive Decay Simulation");	
-		DecayDemo demo = new DecayDemo(2500);
+		DecayDemo demo = new DecayDemo(625);
 
 		frame.getContentPane().add(demo.topPanel);
 
-		frame.setSize(850, 850);
+		frame.setSize(1200, 600);
 		frame.setVisible(true);
 
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
+		frame.setResizable(true);
 		
 	}
 
@@ -93,7 +96,7 @@ public class DecayDemo implements ActionListener, SimulatorListener {
 		if (e.getActionCommand().equals("reset")) {
 			timer.stop();
 			sandbox.reset();
-			chart.reset();
+			chart.reset(sandbox.nAtoms);
 			chart.update(sandbox.nAtoms);
 			control.labelUpdate("Start");
 		}
@@ -114,11 +117,13 @@ public class DecayDemo implements ActionListener, SimulatorListener {
 
 	@Override
 	public void modelChange(ModelEvent event) {
+		System.out.println("modelChange" + event);
 		timer.stop();
+
 		sandbox.nAtomsStart = event.value;
 		sandbox.reset();
-		chart.reset();
-		chart.update(sandbox.nAtoms);
+		chart.reset(event.value);
+
 		control.labelUpdate("Start");
 	}
 }

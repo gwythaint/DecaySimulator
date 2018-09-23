@@ -2,12 +2,14 @@ package net.nevadatechnical.demo;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EventListener;
 import java.util.EventObject;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,8 +26,9 @@ public class ControlPanel extends JPanel implements ChangeListener {
 	private JSpinner nAtomSelect;
 	private String simulatorCommand;
 
-	public ControlPanel (DecayDemo decayDemo) {
-		this.setLayout(new FlowLayout());
+	public ControlPanel (DecayDemo decayDemo, Dimension dim) {
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+//		setPreferredSize(dim);
 		
 		reset = new JButton("Reset");
 		start = new JButton("Start");
@@ -40,13 +43,12 @@ public class ControlPanel extends JPanel implements ChangeListener {
 		start.addActionListener(decayDemo);
 		this.addSimulatorListener(decayDemo);
 		
+//		this.addLabeledSpinner(this, "Number of Atoms", nSpinner);
+		this.add(nAtomSelect);
 		this.add(reset);
 		this.add(start);
-		this.add(nAtomSelect);
 		
 		nAtomSelect.addChangeListener(this);
-
-//		this.addLabeledSpinner(this, "Number of Atoms", nSpinner);
 	}
 	
 	public String getSimulatorCommand() {
